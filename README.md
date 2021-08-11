@@ -12,7 +12,7 @@ cargo install --git https://github.com/veeenu/mdlr
 
 ```
 $ ls
- README.md*   test.md*
+README.md*  test.md*
 $ mdlr
 ```
 
@@ -21,6 +21,6 @@ That's it!
 
 ## Powered by
 
-[Rust](https://www.rust-lang.org/)
-[Rocket](https://rocket.rs/)
-[Pico.css](https://picocss.com/)
+- [Rust](https://www.rust-lang.org/)
+- [Rocket](https://rocket.rs/)
+- [Pico.css](https://picocss.com/)
