@@ -22,5 +22,5 @@ That's it!
 ## Powered by
 
 - [Rust](https://www.rust-lang.org/)
-- [Rocket](https://rocket.rs/)
+- [Axum](https://github.com/tokio-rs/axum)
 - [Pico.css](https://picocss.com/)
