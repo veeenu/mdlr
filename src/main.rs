@@ -1,24 +1,33 @@
-use rocket::http::ContentType;
-use rocket::*;
+use axum::{extract::Path, response::Html, routing::get, Router, Server};
+use pulldown_cmark::{Options, Parser};
 
-#[get("/<file>/render")]
-fn render(file: &str) -> Result<String, String> {
-  let mdcode = std::fs::read_to_string(file).map_err(|e| format!("{}: {}", file, e))?;
+#[tokio::main]
+async fn main() {
+    let app = Router::new()
+        .route("/render/*path", get(serve))
+        .route("/*path", get(index));
 
-  Ok(markdown::to_html(&mdcode))
+    Server::bind(&"0.0.0.0:3000".parse().unwrap())
+        .serve(app.into_make_service())
+        .await
+        .unwrap();
 }
 
-#[get("/<file>")]
-fn page(file: &str) -> (ContentType, String) {
-  const JSCODE: &str = include_str!("index.js");
-  const CSS: &str = include_str!("pico.classless.min.css");
-  (
-    ContentType::HTML,
-    format!(include_str!("index.html"), CSS, file, JSCODE),
-  )
+async fn index(Path(path): Path<String>) -> Html<String> {
+    const JSCODE: &str = include_str!("index.js");
+    const CSS: &str = include_str!("pico.classless.min.css");
+    Html(format!(include_str!("index.html"), CSS, path, JSCODE))
 }
 
-#[launch]
-fn rocket() -> _ {
-  rocket::build().mount("/", routes![render, page])
+async fn serve(Path(path): Path<String>) -> Result<Html<String>, Html<String>> {
+    let path = path.trim_start_matches('/');
+
+    let mdcode = std::fs::read_to_string(path).map_err(|e| Html(format!("{}: {}", path, e)))?;
+    let parser = Parser::new_ext(&mdcode, Options::all());
+    let mut html_output = String::new();
+    pulldown_cmark::html::push_html(&mut html_output, parser);
+    println!("{mdcode}");
+    println!("{html_output}");
+
+    Ok(Html(html_output))
 }
