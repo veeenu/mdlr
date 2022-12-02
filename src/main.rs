@@ -26,8 +26,6 @@ async fn serve(Path(path): Path<String>) -> Result<Html<String>, Html<String>> {
     let parser = Parser::new_ext(&mdcode, Options::all());
     let mut html_output = String::new();
     pulldown_cmark::html::push_html(&mut html_output, parser);
-    println!("{mdcode}");
-    println!("{html_output}");
 
     Ok(Html(html_output))
 }
