@@ -24,3 +24,11 @@ That's it!
 - [Rust](https://www.rust-lang.org/)
 - [Axum](https://github.com/tokio-rs/axum)
 - [Pico.css](https://picocss.com/)
+
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```

@@ -1,11 +1,15 @@
-(function() {
-  let md = document.body.attributes['data-page'].value
-  let div = document.querySelector("#content")
+import mermaid from "https://cdn.skypack.dev/mermaid@8.14.0";
+mermaid.initialize({ 
+  startOnLoad: false,
+  theme: (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ?
+    "dark" : "default"
+})
 
-  setInterval(async function() {
-    let md_text = await (await fetch(`/render/${md}`)).text()
-    console.dir(md_text)
+window.addEventListener('load', () => {
+  document.querySelectorAll("pre > code.language-mermaid").forEach(el => {
+    el.parentElement.classList.add('mermaid')
+    el.parentElement.innerHTML = el.textContent
+  })
 
-    div.innerHTML = md_text
-  }, 2000);
-})();
+  mermaid.init()
+})
